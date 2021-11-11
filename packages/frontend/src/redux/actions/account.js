@@ -43,7 +43,7 @@ export const getProfileStakingDetails = (accountId) => async (dispatch, getState
 
     const lockupIdExists = accountId
         ? !!getState().allAccounts[accountId].balance.lockedAmount
-        : !!getState().account.balance.lockedAmount;
+        : !!getState().account.hasLockup;
 
     lockupIdExists
         && dispatch(handleStakingUpdateLockup(accountId));
