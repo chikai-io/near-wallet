@@ -10,6 +10,7 @@ import {
 } from '../../config';
 import { getLockupAccountId } from '../../utils/account-with-lockup';
 import { showAlert } from '../../utils/alerts';
+import { setStakingAccountSelected } from '../../utils/localStorage';
 import { 
     STAKING_AMOUNT_DEVIATION,
     MIN_DISPLAY_YOCTO,
@@ -432,5 +433,17 @@ export const updateStaking = (currentAccountId, recentlyStakedValidators) => asy
         await dispatch(handleStakingUpdateLockup());
     }
 
-    dispatch(staking.updateCurrent(currentAccountId || accountId));
+    let currentAccount = getState().staking.accounts.find((account) => account.accountId === currentAccountId);
+    
+    if (!currentAccount) {
+        currentAccount = getState().staking.accounts.find((account) => account.accountId === accountId);
+        setStakingAccountSelected(accountId);
+    }
+
+    dispatch(staking.updateCurrent({ currentAccount }));
+};
+
+export const handleUpdateCurrent = (accountId) => async (dispatch, getState) => {
+    let currentAccount = getState().staking.accounts.find((account) => account.accountId === accountId);
+    dispatch(staking.updateCurrent({ currentAccount }));
 };
