@@ -36,17 +36,17 @@ import {
 
 const { handleFlowLimitation, handleClearflowLimitation } = flowLimitationActions;
 
-export const getProfileStakingDetails = (accountId) => async (dispatch, getState) => {
-    await dispatch(handleGetLockup(accountId));
+export const getProfileStakingDetails = (externalAccountId) => async (dispatch, getState) => {
+    await dispatch(handleGetLockup(externalAccountId));
 
-    await dispatch(handleStakingUpdateAccount([], accountId));
+    await dispatch(handleStakingUpdateAccount([], externalAccountId));
 
-    const lockupIdExists = accountId
-        ? !!getState().allAccounts[accountId].balance.lockedAmount
+    const lockupIdExists = externalAccountId
+        ? !!getState().allAccounts[externalAccountId].balance.lockedAmount
         : !!getState().account.hasLockup;
 
     lockupIdExists
-        && dispatch(handleStakingUpdateLockup(accountId));
+        && dispatch(handleStakingUpdateLockup(externalAccountId));
 };
 
 export const handleRedirectUrl = (previousLocation) => (dispatch, getState) => {
